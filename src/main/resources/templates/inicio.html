@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mercado</title>
+</head>
+<body>
+<h1>Produtos</h1>
+
+<form th:action="@{/produto(nome=${nome},tipo=${tipo})}" method="get">
+    <label for="nome">Nome</label>
+    <input type="text" id="nome" name="nome">
+    <label for="tipo">Tipo</label>
+    <input type="text" id="tipo" name="tipo">
+    <input type="submit">
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Preço</th>
+        <th>Tipo</th>
+        <th>Valor</th>
+        <th>Estoque</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="produto : ${produtos}">
+        <td th:text="${produto.getID()}"> </td>
+        <td th:text="${produto.getNome()}"></td>
+        <td th:text="${produto.getTipo()}"></td>
+        <td th:text="${produto.getValor()}"></td>
+        <td th:text="${produto.getEstoque()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
