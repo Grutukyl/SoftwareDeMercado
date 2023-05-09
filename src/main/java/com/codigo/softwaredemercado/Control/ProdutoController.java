@@ -6,16 +6,19 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 
 
-@Controller
+@RestController
 public class ProdutoController {
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -84,14 +87,14 @@ public class ProdutoController {
 
 
 
-    @DeleteMapping(value = "/deletar/{id}")
+    @PostMapping(value = "/deletar/{id}")
     public String deletarProduto(@PathVariable long id){
         if( produtoRepository.existsById(id)){
             produtoRepository.deleteById(id);
-            return "produto deletado";
+            return "/produto";
         }
         else{
-            return "produto não encontrado";
+            return "inicio";
         }
     }
 
