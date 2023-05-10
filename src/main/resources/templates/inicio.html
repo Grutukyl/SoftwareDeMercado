@@ -7,6 +7,7 @@
     <script th:src="@{javascript.js}" type="text/javascript"></script>
 </head>
 <body>
+
 <h1>Produtos</h1>
 
 <form th:action="@{/produto(nome=${nome},tipo=${tipo})}" method="get">
@@ -31,11 +32,10 @@
     <tbody>
     <tr th:each="produto : ${produtos}">
         <td>
-            <form method="post" th:action="@{/deletar/{id}(id=${produto.getID()})}">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit">Deletar</button>
-            </form>
-        </td>
+            <button type="button" th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
+                <img src="x.png" height="15" width="15"/></button>
+
+
         <td th:text="${produto.getID()}"> </td>
         <td th:text="${produto.getNome()}"></td>
         <td th:text="${produto.getTipo()}"></td>

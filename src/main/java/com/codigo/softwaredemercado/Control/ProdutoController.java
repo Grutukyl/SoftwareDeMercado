@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +20,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 
-@RestController
+@Controller
 public class ProdutoController {
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -78,7 +80,7 @@ public class ProdutoController {
         return "inicio";
     }
 
-    @GetMapping("/")
+    @GetMapping("/inicio")
     public String paginaInicial(Model modelo){
         List<Produto> produtos = produtoRepository.findAll();
         modelo.addAttribute("produtos",produtos);
@@ -88,14 +90,15 @@ public class ProdutoController {
 
 
     @PostMapping(value = "/deletar/{id}")
-    public String deletarProduto(@PathVariable long id){
+    public ResponseEntity deletarProduto(@PathVariable long id){
         if( produtoRepository.existsById(id)){
             produtoRepository.deleteById(id);
-            return "/produto";
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else{
-            return "inicio";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
 }
