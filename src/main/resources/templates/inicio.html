@@ -19,6 +19,8 @@
     <input type="submit">
 </form>
 
+<a href="/cadastro"><button>CADASTRAR</button></a>
+
 <table>
     <thead>
     <tr>
@@ -32,8 +34,8 @@
     <tbody>
     <tr th:each="produto : ${produtos}">
         <td>
-            <button type="button" th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
-                <img src="x.png" height="15" width="15"/></button>
+            <button th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
+                <img src="x.png" height="10" width="10"/></button>
 
 
         <td th:text="${produto.getID()}"> </td>

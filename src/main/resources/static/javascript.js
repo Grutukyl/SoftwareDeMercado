@@ -13,3 +13,13 @@ function enviarDelete(id) {
         }
     });
 }
+
+function redirectCadastro() {
+    fetch(`/cadastro`,  {
+        method: 'GET',
+    });
+}
+
+function salvarCadastro(){
+
+}

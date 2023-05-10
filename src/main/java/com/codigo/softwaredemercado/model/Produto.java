@@ -1,6 +1,5 @@
 package com.codigo.softwaredemercado.model;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

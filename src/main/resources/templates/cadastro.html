@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mercado</title>
+</head>
+<body>
+
+<h1>Cadastro de produtos</h1>
+
+<form th:action="@{/cadastrar}" th:method="POST" enctype="multipart/form-data">
+
+    <label for="nome">Nome</label>
+    <input type="text" id="nome" name="nome">
+    <label for="tipo">Tipo</label>
+    <input type="text" id="tipo" name="tipo">
+    <label for="valor">Valor</label>
+    <input type="text" id="valor" name="valor">
+    <label for="estoque">Estoque</label>
+    <input type="number" name="estoque" id="estoque">
+    <input type="submit">
+</form>
+
+</body>
+</html>

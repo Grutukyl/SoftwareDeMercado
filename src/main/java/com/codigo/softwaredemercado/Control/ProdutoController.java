@@ -7,9 +7,11 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.header.Header;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,22 +29,29 @@ public class ProdutoController {
 
 
     @PostMapping(value = "/cadastrar")
-    public String cadastrarProduto(@RequestBody Produto produto){
+    public ResponseEntity cadastrarProduto(Produto produto){
         if(produtoRepository.existsByNome(produto.getNome())){
-            return"Esse produto já existe, verifique na lista!";
+            return new ResponseEntity(HttpStatus.ALREADY_REPORTED);
         }
         else{
             try {
                 produtoRepository.save(produto);
             }
             catch (ConstraintViolationException ex){
-                return "ERRO: " + ex.getConstraintViolations().stream()
+                String erro =  ex.getConstraintViolations().stream()
                         .map(ConstraintViolation::getMessageTemplate)
                         .findFirst()
                         .orElse("Erro desconhecido");
+                return new ResponseEntity(HttpStatus.BAD_REQUEST).noContent().
+                        header(erro).build();
             }
         }
-        return "Cadastrado com sucesso!";
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/cadastro")
+    public String paginaCadastro(){
+        return "cadastro";
     }
 
     @PostMapping(value = "/atualizarProduto")
