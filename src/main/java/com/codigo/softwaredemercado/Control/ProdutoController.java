@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Objects;
 
 
 @Controller
@@ -29,24 +30,19 @@ public class ProdutoController {
 
 
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity cadastrarProduto(Produto produto){
+    public ResponseEntity<Object> cadastrarProduto(Produto produto){
         if(produtoRepository.existsByNome(produto.getNome())){
             return new ResponseEntity(HttpStatus.ALREADY_REPORTED);
         }
         else{
             try {
                 produtoRepository.save(produto);
+                return new ResponseEntity(HttpStatus.OK);
             }
             catch (ConstraintViolationException ex){
-                String erro =  ex.getConstraintViolations().stream()
-                        .map(ConstraintViolation::getMessageTemplate)
-                        .findFirst()
-                        .orElse("Erro desconhecido");
-                return new ResponseEntity(HttpStatus.BAD_REQUEST).noContent().
-                        header(erro).build();
+                return new ResponseEntity(ex.getMessage(),HttpStatus.BAD_REQUEST);
             }
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/cadastro")
