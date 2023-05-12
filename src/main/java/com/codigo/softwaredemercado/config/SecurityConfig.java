@@ -42,14 +42,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                .requestMatchers("/inicio/").permitAll()
-                .requestMatchers("/inicio","/static/**").permitAll()
-                .requestMatchers("/login*" , "/static/**").permitAll()
-                .requestMatchers(HttpMethod.POST,"/deletar/**").hasRole("admin")
-                .anyRequest()
-                .authenticated()
-                .and()
+
+
+
+        http.csrf().disable().authorizeHttpRequests((authorize) ->authorize
+                        .requestMatchers("/cadastro", "/cadastrar").hasRole("admin")
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().hasRole("admin")
+                )
                 .formLogin()
                 .defaultSuccessUrl("/produto")
                 .permitAll()

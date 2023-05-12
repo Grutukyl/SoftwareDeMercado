@@ -2,16 +2,14 @@ package com.codigo.softwaredemercado.Control;
 
 import com.codigo.softwaredemercado.model.Produto;
 import com.codigo.softwaredemercado.repository.ProdutoRepository;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.web.header.Header;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -67,7 +65,7 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/produto")
-    public String procurarProdutoNome(Model modelo, @RequestParam(required = false) String nome, @RequestParam(required = false) String tipo){
+    public String procurarProdutoNome(Model modelo, @RequestParam(required = false) String nome, @RequestParam(required = false) String tipo, Authentication authentication){
         List<Produto> produtos = null;
         if(nome != null){
             produtos = produtoRepository.findByNomeContainingIgnoreCase(nome);
@@ -82,28 +80,37 @@ public class ProdutoController {
             produtos = produtoRepository.findAll();
         }
         modelo.addAttribute("produtos",produtos);
+        if(authentication != null) {
+            modelo.addAttribute("autenticado", authentication.isAuthenticated());
+        }
         return "inicio";
     }
 
     @GetMapping("/inicio")
-    public String paginaInicial(Model modelo){
+    public String paginaInicial(Model modelo, Authentication authentication){
         List<Produto> produtos = produtoRepository.findAll();
         modelo.addAttribute("produtos",produtos);
+        if(authentication != null) {
+            modelo.addAttribute("autenticado", authentication.isAuthenticated());
+        }
+
         return "inicio";
     }
 
 
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/deletar/{id}")
-    public ResponseEntity deletarProduto(@PathVariable long id){
-        if( produtoRepository.existsById(id)){
-            produtoRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity deletarProduto(@PathVariable long id, Authentication authentication) {
+        if (authentication != null) {
+            if (produtoRepository.existsById(id)) {
+                produtoRepository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
 
 }

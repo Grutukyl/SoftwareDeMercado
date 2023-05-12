@@ -5,47 +5,72 @@
     <title>Mercado</title>
     <script th:src="@{../static/javascript.js}" type="text/javascript"></script>
     <script th:src="@{javascript.js}" type="text/javascript"></script>
+    <link th:href="@{/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
 </head>
-<body>
-
-<h1>Produtos</h1>
-
-<form th:action="@{/produto(nome=${nome},tipo=${tipo})}" method="get">
-
-    <label for="nome">Nome</label>
-    <input type="text" id="nome" name="nome">
-    <label for="tipo">Tipo</label>
-    <input type="text" id="tipo" name="tipo">
-    <input type="submit">
-</form>
-
-<a href="/cadastro"><button>CADASTRAR</button></a>
-
-<table>
-    <thead>
-    <tr>
-        <th>Nome</th>
-        <th>Preço</th>
-        <th>Tipo</th>
-        <th>Valor</th>
-        <th>Estoque</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="produto : ${produtos}">
-        <td>
-            <button th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
-                <img src="x.png" height="10" width="10"/></button>
+<body class="bg-secondary">
 
 
-        <td th:text="${produto.getID()}"> </td>
-        <td th:text="${produto.getNome()}"></td>
-        <td th:text="${produto.getTipo()}"></td>
-        <td th:text="${produto.getValor()}"></td>
-        <td th:text="${produto.getEstoque()}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="form-group p-5 bg-dark text-white">
+    <h3>PRODUTO</h3>
+    <div th:if="${autenticado}">
+    <p>Logado como administrador!!</p>
+    </div>
 
+    <form th:action="@{/produto(nome=${nome},tipo=${tipo})}" method="get">
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" class="form-control">
+            </div>
+            <div class="form-group col">
+                <label for="tipo">Tipo</label>
+                <input type="text" id="tipo" name="tipo" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn " value="BUSCAR">
+            <a th:if="${autenticado}" href="/cadastro">
+                <button CLASS="btn btn-info" type="button">CADASTRAR</button>
+            </a>
+            <a th:if="${autenticado}" href="/logout">
+                <button CLASS="btn btn-danger" type="button">SAIR</button>
+            </a>
+            <a th:if="${autenticado == null}" href="/cadastro">
+                <button CLASS="btn btn-info" type="button">ADMIN</button>
+            </a>
+        </div>
+
+    </form>
+</div>
+
+<div class="table-responsive p-5">
+    <table class="table table-bordered  table-dark align fontPerso">
+        <thead>
+        <tr>
+            <th>=</th>
+            <th>ID</th>
+            <th >Nome</th>
+            <th>Preço</th>
+            <th>Tipo</th>
+            <th>Estoque</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  class="align-middle" th:each="produto : ${produtos}" >
+            <td class="align-middle">
+                <button th:if="${autenticado}" th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
+                    <img src="deletar.svg" height="15px" width="15px" alt="descrição da imagem">
+                </button>
+            </td>
+            <td class="align-middle" th:text="${produto.getID()}">teste</td>
+            <td class="align-middle"th:text="${produto.getNome()}">teste</td>
+            <td class="align-middle"th:text="${produto.getValor()}">teste</td>
+            <td class="align-middle"th:text="${produto.getTipo()}">teste</td>
+            <td class="align-middle"th:text="${produto.getEstoque()}">teste</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
