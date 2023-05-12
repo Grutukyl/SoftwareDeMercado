@@ -17,12 +17,22 @@ function redirectCadastro() {
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById("cadastroProduto");
+    const att = document.getElementById("ID");
+    let rota = '/cadastrar'
+    if(att != null){
+
+        rota = "/atualizarProduto";
+        alert(rota);
+    }
+
+
     form.addEventListener('submit', (event) => {
         event.preventDefault(); // previne o comportamento padrão do envio do formulário
 
         const formData = new FormData(form);
 
-        fetch('/cadastrar', {
+
+        fetch(rota, {
             method: 'POST',
             body: formData
         })

@@ -46,7 +46,7 @@ public class SecurityConfig {
 
 
         http.csrf().disable().authorizeHttpRequests((authorize) ->authorize
-                        .requestMatchers("/cadastro", "/cadastrar").hasRole("admin")
+                        .requestMatchers("/cadastro**", "/cadastrar","/atualizarProduto").hasRole("admin")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().hasRole("admin")
                 )

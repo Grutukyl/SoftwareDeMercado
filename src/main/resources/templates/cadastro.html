@@ -27,6 +27,9 @@
 </div>
 
 
+<div th:if="${produto != null}">
+
+</div>
 
 
 <div class="bg-dark container shadow">
@@ -34,10 +37,12 @@
 
         <div class=" justify-content-between">
             <div class="form-row">
+                <label th:if="${produto != null}" for="id">ID</label>
+                <input th:if="${produto != null}" class="form-control form-group" type="text" name="ID" id="ID" th:value="${produto != null ? produto.get().getID() : ''}" th:readonly="${produto != null}">
                 <label for="nome">Nome</label>
-                <input class="form-control form-group" type="text" id="nome" name="nome" required>
+                <input class="form-control form-group" type="text" id="nome" name="nome" th:value="${produto != null ? produto.get().getNome() : ''}" th:readonly="${produto != null}" required>
                 <label for="tipo">Tipo</label>
-                <input class="form-control form-group" type="text" id="tipo" name="tipo" required>
+                <input class="form-control form-group" type="text" id="tipo" name="tipo" th:value="${produto != null ? produto.get().getTipo() : ''}" th:readonly="${produto != null}" required>
             </div>
         </div>
         <div class=" justify-content-between">
@@ -49,7 +54,7 @@
             </div>
         </div>
         <div class="form-group">
-            <input type="submit" class="btn shadow" value="CADASTRAR">
+            <input type="submit" class="btn shadow" th:value="${produto != null ? 'ATUALIZAR' : 'CADASTRAR'}">
         </div>
 
 
