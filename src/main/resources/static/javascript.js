@@ -17,19 +17,21 @@ function redirectCadastro() {
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById("cadastroProduto");
+
     const att = document.getElementById("ID");
     let rota = '/cadastrar'
     if(att != null){
 
         rota = "/atualizarProduto";
-        alert(rota);
     }
 
 
     form.addEventListener('submit', (event) => {
         event.preventDefault(); // previne o comportamento padrão do envio do formulário
-
+        const valor = document.getElementById("valor");
+        valor.value = valor.value.replace(/,/g, '.');
         const formData = new FormData(form);
+
 
 
         fetch(rota, {
@@ -39,11 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => {
                 if (response.status === 200) {
                     setTimeout(() => {
-                        alert("Produto cadastrado com sucesso!");
+                        adicionarProdutoLista(formData.get("nome"), "green");
+                        form.reset();
                     }, 500);
-                    adicionarProdutoLista(formData.get("nome"));
                 } else if (response.status === 208) {
                     alert("Este produto já existe no banco de dados!");
+                }else if (response.status === 204) {
+                    adicionarProdutoLista(formData.get("nome"), "yellow");
                 } else {
                     alert("Erro ao cadastrar produto!");
                 }
@@ -53,11 +57,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function adicionarProdutoLista(nome){
+function adicionarProdutoLista(nome, cor){
     var tabela = document.getElementById("produtosAdicionados");
     var novaLinha = document.createElement("tr");
     var novaCelula = document.createElement("td");
     novaCelula.textContent ="Produto " + nome + " foi adiocionado!";
+    novaCelula.style.color = cor;
     novaLinha.appendChild(novaCelula);
     var corpoTabela = tabela.querySelector("tbody");
     corpoTabela.appendChild(novaLinha);

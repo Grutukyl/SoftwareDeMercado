@@ -14,7 +14,7 @@
 <div class="container bg-dark text-white">
     <div class="row">
         <div class="col-10">
-            <h1 class="">Cadastro de produtos</h1>
+            <h1 class="" th:text="${produto != null ? 'Atualização de produto' : 'Cadastro de produtos'}"></h1>
         </div>
         <div class="col-2   ">
             <div class="container">

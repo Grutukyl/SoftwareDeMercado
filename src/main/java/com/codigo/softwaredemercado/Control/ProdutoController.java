@@ -31,78 +31,72 @@ public class ProdutoController {
 
 
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<Object> cadastrarProduto(Produto produto){
-        if(produtoRepository.existsByNome(produto.getNome())){
+    public ResponseEntity<Object> cadastrarProduto(Produto produto) {
+        if (produtoRepository.existsByNome(produto.getNome())) {
             return new ResponseEntity(HttpStatus.ALREADY_REPORTED);
-        }
-        else{
+        } else {
             try {
                 produtoRepository.save(produto);
                 return new ResponseEntity(HttpStatus.OK);
-            }
-            catch (ConstraintViolationException ex){
-                return new ResponseEntity(ex.getMessage(),HttpStatus.BAD_REQUEST);
+            } catch (ConstraintViolationException ex) {
+                return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
             }
         }
     }
 
     @GetMapping("/cadastro")
-    public String paginaCadastro(@RequestParam(required = false) String id, Model modelo){
-        if(id != null){
+    public String paginaCadastro(@RequestParam(required = false) String id, Model modelo) {
+        if (id != null) {
             Optional<Produto> produto;
             produto = produtoRepository.findById(Long.parseLong(id));
-            modelo.addAttribute("produto",produto);
-            System.out.println("Retornando : " +produto.get().getNome());
+            modelo.addAttribute("produto", produto);
+            System.out.println("Retornando : " + produto.get().getNome());
             return "cadastro";
         }
         return "cadastro";
     }
 
     @PostMapping(value = "/atualizarProduto")
-    public ResponseEntity atualizarProduto( Produto produto) {
-        System.out.println("TESTEEEEEEEEEEEEEEEEEEEEEEEEEE" + produto.getID());
-
+    public ResponseEntity atualizarProduto(Produto produto) {
         if (produtoRepository.existsByNome(produto.getNome())) {
-                try {
-                    produtoRepository.save(produto);
-                    return new ResponseEntity(HttpStatus.OK);
-                }
-                catch (ConstraintViolationException ex){
-                    return new ResponseEntity(ex.getMessage(),HttpStatus.BAD_REQUEST);
-                }
-            } else {
-               return  new ResponseEntity(HttpStatus.NOT_FOUND);
+            try {
+                produtoRepository.save(produto);
+                    return new ResponseEntity(HttpStatus.NO_CONTENT);
+            } catch (ConstraintViolationException ex) {
+                return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
 
     @GetMapping(value = "/produto")
-    public String procurarProdutoNome(Model modelo, @RequestParam(required = false) String nome, @RequestParam(required = false) String tipo, Authentication authentication){
+    public String procurarProdutoNome(Model modelo, @RequestParam(required = false) String nome, @RequestParam(required = false) String tipo, Authentication authentication) {
         List<Produto> produtos = null;
-        if(nome != null){
+        if (nome != null) {
             produtos = produtoRepository.findByNomeContainingIgnoreCase(nome);
         }
-        if(tipo != null){
+        if (tipo != null) {
             produtos = produtoRepository.findByTipoContainingIgnoreCase(tipo);
         }
-        if(tipo != null && nome !=null){
-            produtos = produtoRepository.findByNomeContainingIgnoreCaseAndTipoContainingIgnoreCase(nome,tipo);
-        }
-        else{
+        if (tipo != null && nome != null) {
+            produtos = produtoRepository.findByNomeContainingIgnoreCaseAndTipoContainingIgnoreCase(nome, tipo);
+        } else {
             produtos = produtoRepository.findAll();
         }
-        modelo.addAttribute("produtos",produtos);
-        if(authentication != null) {
+        modelo.addAttribute("produtos", produtos);
+        if (authentication != null) {
             modelo.addAttribute("autenticado", authentication.isAuthenticated());
         }
         return "inicio";
     }
 
     @GetMapping("/inicio")
-    public String paginaInicial(Model modelo, Authentication authentication){
+    public String paginaInicial(Model modelo, Authentication authentication) {
         List<Produto> produtos = produtoRepository.findAll();
-        modelo.addAttribute("produtos",produtos);
-        if(authentication != null) {
+        modelo.addAttribute("produtos", produtos);
+        if (authentication != null) {
             modelo.addAttribute("autenticado", authentication.isAuthenticated());
         }
 

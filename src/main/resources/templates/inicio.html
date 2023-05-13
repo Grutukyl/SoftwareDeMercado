@@ -36,7 +36,7 @@
             <a th:if="${autenticado}" href="/logout">
                 <button CLASS="btn btn-danger" type="button">SAIR</button>
             </a>
-            <a th:if="${autenticado == null}" href="/cadastro">
+            <a th:if="${autenticado == null}" href="/login">
                 <button CLASS="btn btn-info" type="button">ADMIN</button>
             </a>
         </div>
@@ -48,25 +48,34 @@
     <table class="table table-bordered  table-dark align fontPerso">
         <thead>
         <tr>
-            <th>=</th>
-            <th>ID</th>
-            <th >Nome</th>
-            <th>Preço</th>
+            <th class="espacoPerco">=</th>
+            <th>CÓDIGO</th>
+            <th>Nome</th>
             <th>Tipo</th>
+            <th>Preço</th>
             <th>Estoque</th>
         </tr>
         </thead>
         <tbody>
         <tr  class="align-middle" th:each="produto : ${produtos}" >
-            <td class="align-middle">
-                <button th:if="${autenticado}" th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
-                    <img src="deletar.svg" height="15px" width="15px" alt="descrição da imagem">
-                </button>
+            <td>
+                <div class="d-flex flex-row align-items-center" th:if="${autenticado}">
+                    <div class="p-2">
+                    <button th:onclick="'enviarDelete(\'' + ${produto.getID()} + '\')'">
+                        <img src="deletar.svg" height="15px" width="15px" alt="descrição da imagem">
+                    </button>
+                    </div>
+                    <div class="p-2">
+                        <a class="" th:href="'/cadastro?id=' + ${produto.getID()}">
+                            <img src="editar.png" height="15px" width="15px" alt="descrição da imagem">
+                        </a>
+                    </div>
+                </div>
             </td>
             <td class="align-middle" th:text="${produto.getID()}">teste</td>
             <td class="align-middle"th:text="${produto.getNome()}">teste</td>
-            <td class="align-middle"th:text="${produto.getValor()}">teste</td>
             <td class="align-middle"th:text="${produto.getTipo()}">teste</td>
+            <td class="align-middle"th:text="${produto.getValor()}">teste</td>
             <td class="align-middle"th:text="${produto.getEstoque()}">teste</td>
         </tr>
         </tbody>
