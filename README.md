@@ -1,2 +1,7 @@
 # SoftwareDeMercado
- Projeto para minha aula de teste de software utilizando Spring, thymeleaft, JavaScript e bootsrap.
+ Projeto para minha aula de teste de software utilizando:
+ H2DB
+ Spring Boot
+ thymeleaft
+ JavaScript
+ Bootsrap
